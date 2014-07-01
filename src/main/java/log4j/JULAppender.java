@@ -18,10 +18,13 @@ package log4j;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.helpers.LogLog;
+import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
+
+import java.util.logging.LogRecord;
 
 /**
  * A Log4j appender for Java Logging API (aka JUL). This appender allows
@@ -170,21 +173,6 @@ public class JULAppender extends AppenderSkeleton {
             return;
         }
 
-        // Layout is optional. No layout --> the message is written without
-        // formatting.
-        // In practice, since the requiresLayout method of this appender returns
-        // true,
-        // layout should never be null at this point, however, it is possible
-        // that
-        // the logging service will support optional layouts in the future...
-
-        String msg;
-        if (layout != null) {
-            msg = layout.format(loggingEvent);
-        } else {
-            msg = loggingEvent.getRenderedMessage();
-        }
-
         // Split the level mapping logic into 2 sections for performance reasons
         // -
         // All low-level messages (debug, trace, etc) are separated from the
@@ -195,7 +183,16 @@ public class JULAppender extends AppenderSkeleton {
 
         java.util.logging.Level jullevel = levelConverter
                 .convertLog4jLevel(level);
-        logger.log(jullevel, msg);
+
+        LogRecord lr = new LogRecord(jullevel,loggingEvent.getRenderedMessage());
+        lr.setMillis(loggingEvent.getTimeStamp());
+        LocationInfo loc = loggingEvent.getLocationInformation();
+        if (loc!=null) {
+            lr.setSourceClassName(loc.getClassName());
+            lr.setSourceMethodName(loc.getMethodName());
+        }
+
+        logger.log(lr);
     }
 
     /**

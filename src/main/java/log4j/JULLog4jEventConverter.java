@@ -46,7 +46,7 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
         public Level convertJuliLevel(java.util.logging.Level juliLevel) {
 
             if (juliLevel.equals(java.util.logging.Level.FINEST)) {
-//                return Level.TRACE;
+                return Level.TRACE;
             } else if (juliLevel.equals(java.util.logging.Level.FINER)) {
                 return Level.DEBUG;
             } else if (juliLevel.equals(java.util.logging.Level.FINE)) {
@@ -67,10 +67,9 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
         }
 
         public java.util.logging.Level convertLog4jLevel(Level log4jLevel) {
-//            if (log4jLevel.equals(Level.TRACE)) {
-//                return java.util.logging.Level.FINEST;
-//            } else
-            if (log4jLevel.equals(Level.DEBUG)) {
+            if (log4jLevel.equals(Level.TRACE)) {
+                return java.util.logging.Level.FINEST;
+            } else if (log4jLevel.equals(Level.DEBUG)) {
                 return java.util.logging.Level.FINER;
             } else if (log4jLevel.equals(Level.INFO)) {
                 return java.util.logging.Level.INFO;
