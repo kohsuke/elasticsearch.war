@@ -46,7 +46,7 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
         public Level convertJuliLevel(java.util.logging.Level juliLevel) {
 
             if (juliLevel.equals(java.util.logging.Level.FINEST)) {
-                return Level.TRACE;
+//                return Level.TRACE;
             } else if (juliLevel.equals(java.util.logging.Level.FINER)) {
                 return Level.DEBUG;
             } else if (juliLevel.equals(java.util.logging.Level.FINE)) {
@@ -67,9 +67,10 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
         }
 
         public java.util.logging.Level convertLog4jLevel(Level log4jLevel) {
-            if (log4jLevel.equals(Level.TRACE)) {
-                return java.util.logging.Level.FINEST;
-            } else if (log4jLevel.equals(Level.DEBUG)) {
+//            if (log4jLevel.equals(Level.TRACE)) {
+//                return java.util.logging.Level.FINEST;
+//            } else
+            if (log4jLevel.equals(Level.DEBUG)) {
                 return java.util.logging.Level.FINER;
             } else if (log4jLevel.equals(Level.INFO)) {
                 return java.util.logging.Level.INFO;
@@ -95,7 +96,7 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
 
     /**
      * Creates a default converter implementation that uses the default {@link LoggerRepository},
-     * ad the default {@link JuliLevelConverter}
+     * ad the default {@link JULLevelConverter}
      */
     public JULLog4jEventConverter() {
         this(LogManager.getLoggerRepository());
@@ -110,34 +111,4 @@ private static final String UNKNOWN_LOGGER_NAME = "unknown.jul.logger";
         this.levelConverter = levelConverter;
     }
 
-    /**
-     * Converts a {@link LogRecord} class into a {@link LoggingEvent} instance mapping the
-     * loggernames identically.
-     * 
-     * @param record
-     *            to convert
-     * @return converted {@link LoggingEvent}
-     */
-    public LoggingEvent convert(LogRecord record) {
-        String loggerName = record.getLoggerName();
-        if (loggerName == null) {
-    	    loggerName = UNKNOWN_LOGGER_NAME;
-        }
-        Logger logger = repository.getLogger(loggerName);
-        String sourceClassName = record.getSourceClassName();
-        String sourceMethodName = record.getSourceMethodName();
-        LocationInfo locationInfo = new LocationInfo("?", sourceClassName, sourceMethodName, "?");
-        String ndc = null;
-        // TODO get thread name properly.
-        String threadName = String.valueOf(record.getThreadID());
-        ThrowableInformation throwableInformation = record.getThrown() == null ? null
-                : new ThrowableInformation(record.getThrown());
-        LoggingEvent event = new LoggingEvent(loggerName, logger, record.getMillis(),
-                levelConverter.convertJuliLevel(record.getLevel()), record.getMessage(),
-                threadName, throwableInformation, ndc, locationInfo, new Properties()
-
-        );
-
-        return event;
-    }
 }

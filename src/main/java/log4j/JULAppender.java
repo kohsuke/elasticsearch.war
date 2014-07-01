@@ -16,6 +16,7 @@
 
 package log4j;
 
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.AppenderSkeleton;
@@ -71,7 +72,7 @@ import org.apache.log4j.Level;
  * error and fatal log4j events are mapped to SEVERE.<br>
  * <br>
  * 
- * Usage and configuration is identical to using the {@link ConsoleAppener}.
+ * Usage and configuration is identical to using the {@link ConsoleAppender}.
  * Any application currently configured to use the ConsoleAppender, and wishes
  * to switch to JulAppender simply has to replace "ConsoleAppender" with
  * "JulAppender" in its log4j configuration; for example:<br>
